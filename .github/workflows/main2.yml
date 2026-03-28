@@ -1,0 +1,22 @@
+name: Build Trakt Plugin
+on: [workflow_dispatch, push] # Lets you trigger it manually or by saving the file
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.0.x' # Trakt plugin typically uses .NET 6.0
+
+      - name: Build
+        run: dotnet publish --configuration Release --output bin
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trakt-plugin-fix
+          path: bin/*.dll # This grabs the compiled plugin file
